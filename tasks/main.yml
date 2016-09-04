@@ -1,2 +1,20 @@
 ---
-# tasks file for minikube_role
+- name: Install VirtualBox
+  apt: virtualbox state=latest update_cache=yes
+  environment: env
+- name: Download minikube
+  get_url:  https://storage.googleapis.com/minikube/releases/v0.6.0/minikube-darwin-amd64
+  dest: /tmp/minikube
+  checksum: sha256:76b341aa377c274c7147e203483f117ef01151a8e33bb232e29872ad20f6effc
+- name: Make minikube executable and copy it to be seen from $PATH
+  copy: src:/tmp/minikube dest=/usr/local/bin/ mode=0740
+- name: Download kubectl
+  get_url: http://storage.googleapis.com/kubernetes-release/release/v1.3.0/bin/darwin/amd64/kubectl
+  dest: /tmp/kubectl
+  checksum: sha256:ec6941a5ff14ddd5044f11f369a8e0946f00201febc73282554f2150aad5bc06
+  mode: 0740
+- name: Copy kubectl it to be seen from $PATH
+  copy: src:/tmp/kubectl dest=/usr/local/bin/
+- name: Start minikube
+  shell: minikube start
+  
