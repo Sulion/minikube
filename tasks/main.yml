@@ -1,20 +1,21 @@
 ---
+
 - name: Install VirtualBox
-  apt: virtualbox state=latest update_cache=yes
-  environment: env
+  apt: package=virtualbox state=latest update_cache=yes
 - name: Download minikube
-  get_url:  https://storage.googleapis.com/minikube/releases/v0.6.0/minikube-darwin-amd64
-  dest: /tmp/minikube
-  checksum: sha256:76b341aa377c274c7147e203483f117ef01151a8e33bb232e29872ad20f6effc
+  get_url:
+    url: https://storage.googleapis.com/minikube/releases/v0.9.0/minikube-linux-amd64
+    dest: /tmp/minikube
+    checksum: sha256:76b341aa377c274c7147e203483f117ef01151a8e33bb232e29872ad20f6effc
 - name: Make minikube executable and copy it to be seen from $PATH
-  copy: src:/tmp/minikube dest=/usr/local/bin/ mode=0740
+  copy: src=/tmp/minikube dest=/usr/local/bin/ mode=0740
 - name: Download kubectl
-  get_url: http://storage.googleapis.com/kubernetes-release/release/v1.3.0/bin/darwin/amd64/kubectl
-  dest: /tmp/kubectl
-  checksum: sha256:ec6941a5ff14ddd5044f11f369a8e0946f00201febc73282554f2150aad5bc06
-  mode: 0740
+  get_url:
+    url: http://storage.googleapis.com/kubernetes-release/release/v1.3.0/bin/linux/amd64/kubectl
+    dest: /tmp/kubectl
+    checksum: sha256:f40b2d0ff33984e663a0dea4916f1cb9041abecc09b11f9372cdb8049ded95dc
+    mode: 0740
 - name: Copy kubectl it to be seen from $PATH
-  copy: src:/tmp/kubectl dest=/usr/local/bin/
+  copy: src=/tmp/kubectl dest=/usr/local/bin/
 - name: Start minikube
   shell: minikube start
-  
